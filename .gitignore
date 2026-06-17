@@ -1,0 +1,28 @@
+## Build results
+bin/
+obj/
+out/
+
+## IDE
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+## User secrets
+secrets.json
+appsettings.Development.json
+
+## Tools
+.tools/
+
+## OS
+Thumbs.db
+.DS_Store
+
+## Logs
+*.log
+
+## Azure
+local.settings.json

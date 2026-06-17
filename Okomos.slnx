@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Okomos.Accounting/Okomos.Accounting.csproj" />
+    <Project Path="src/Okomos.Api/Okomos.Api.csproj" />
+    <Project Path="src/Okomos.Billing/Okomos.Billing.csproj" />
+    <Project Path="src/Okomos.Identity/Okomos.Identity.csproj" />
+    <Project Path="src/Okomos.Inventory/Okomos.Inventory.csproj" />
+    <Project Path="src/Okomos.SharedKernel/Okomos.SharedKernel.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Okomos.Accounting.Tests/Okomos.Accounting.Tests.csproj" />
+    <Project Path="tests/Okomos.Billing.Tests/Okomos.Billing.Tests.csproj" />
+    <Project Path="tests/Okomos.Identity.Tests/Okomos.Identity.Tests.csproj" />
+    <Project Path="tests/Okomos.Inventory.Tests/Okomos.Inventory.Tests.csproj" />
+    <Project Path="tests/Okomos.SharedKernel.Tests/Okomos.SharedKernel.Tests.csproj" />
+  </Folder>
+</Solution>
