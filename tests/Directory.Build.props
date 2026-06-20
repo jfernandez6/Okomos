@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Shared\DockerHelper.cs" Link="Shared\DockerHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Shared\TestDoubles.cs" Link="Shared\TestDoubles.cs" />
   </ItemGroup>
 
   <ItemGroup>

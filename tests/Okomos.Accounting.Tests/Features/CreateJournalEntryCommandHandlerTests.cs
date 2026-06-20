@@ -13,13 +13,12 @@ public class CreateJournalEntryCommandHandlerTests
     {
         var tenantId = Guid.NewGuid();
         var tenantProvider = new TestTenantProvider(tenantId);
-        var eventBus = new TestEventBus();
 
         var options = new DbContextOptionsBuilder<AccountingDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
 
-        await using var dbContext = new AccountingDbContext(options, tenantProvider, eventBus);
+        await using var dbContext = new AccountingDbContext(options, tenantProvider);
         var handler = new CreateJournalEntryCommandHandler(dbContext, tenantProvider);
 
         var entryId = await handler.HandleAsync(new CreateJournalEntryCommand("Test entry", 100m, 100m));
@@ -28,6 +27,6 @@ public class CreateJournalEntryCommandHandlerTests
         var entry = await dbContext.JournalEntries.SingleAsync();
         entry.Description.Should().Be("Test entry");
         entry.TenantId.Should().Be(tenantId);
-        eventBus.DomainEvents.Should().ContainSingle();
+        entry.DomainEvents.Should().ContainSingle();
     }
 }

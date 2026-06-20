@@ -1,11 +1,14 @@
 using Okomos.SharedKernel.Abstractions.Events;
 using Okomos.SharedKernel.Abstractions.Multitenancy;
 
-namespace Okomos.Inventory.Tests.Infrastructure;
+namespace Okomos.Tests.Shared;
 
 public sealed class TestTenantProvider : ITenantProvider
 {
-    public TestTenantProvider(Guid tenantId) => SetTenant(tenantId);
+    public TestTenantProvider(Guid tenantId, string? slug = null)
+    {
+        SetTenant(tenantId, slug);
+    }
 
     public Guid? CurrentTenantId { get; private set; }
     public string? CurrentTenantSlug { get; private set; }

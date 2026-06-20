@@ -12,16 +12,18 @@ using Okomos.SharedKernel.Multitenancy;
 using Okomos.SharedKernel.Outbox;
 using Okomos.SharedKernel.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Okomos.SharedKernel;
 
 public static class SharedKernelDependencyInjection
 {
-    public static IServiceCollection AddSharedKernel(this IServiceCollection services)
+    public static IServiceCollection AddSharedKernel(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<ITenantProvider, TenantProvider>();
         services.AddScoped<IEventBus, EventBus>();
+        services.Configure<OutboxOptions>(configuration.GetSection("Outbox"));
         services.AddHostedService<OutboxProcessorHostedService>();
 
         return services;
@@ -43,9 +45,10 @@ public static class SharedKernelDependencyInjection
 
             if (useDomainEvents)
             {
-                handler = new DomainEventsCommandDecorator<TCommand, TResult>(
+                handler = new DomainEventsCommandDecorator<TCommand, TResult, TDbContext>(
                     handler,
-                    sp.GetRequiredService<IDomainEventDispatcher>());
+                    sp.GetRequiredService<IDomainEventDispatcher>(),
+                    sp.GetRequiredService<TDbContext>());
             }
 
             if (useTransaction)

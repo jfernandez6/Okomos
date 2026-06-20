@@ -14,13 +14,12 @@ public class GetProductByIdQueryHandlerTests
     {
         var tenantId = Guid.NewGuid();
         var tenantProvider = new TestTenantProvider(tenantId);
-        var eventBus = new TestEventBus();
 
         var options = new DbContextOptionsBuilder<InventoryDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
 
-        await using var dbContext = new InventoryDbContext(options, tenantProvider, eventBus);
+        await using var dbContext = new InventoryDbContext(options, tenantProvider);
         var product = Product.Create(tenantId, "Item", "SKU-99", 5, 15m);
         dbContext.Products.Add(product);
         await dbContext.SaveChangesAsync();

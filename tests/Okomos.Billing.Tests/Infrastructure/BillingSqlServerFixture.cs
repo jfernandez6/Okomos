@@ -29,9 +29,8 @@ public sealed class BillingSqlServerFixture : IAsyncLifetime
             .Options;
 
         var tenantProvider = new TestTenantProvider(Guid.NewGuid());
-        var eventBus = new TestEventBus();
 
-        await using var context = new BillingDbContext(options, tenantProvider, eventBus);
+        await using var context = new BillingDbContext(options, tenantProvider);
         await context.Database.EnsureCreatedAsync();
     }
 

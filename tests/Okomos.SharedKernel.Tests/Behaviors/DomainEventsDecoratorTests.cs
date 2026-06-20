@@ -2,6 +2,7 @@ using FluentAssertions;
 using Okomos.SharedKernel.Behaviors.DomainEvents;
 using Okomos.SharedKernel.Events;
 using Okomos.SharedKernel.Tests.TestHelpers;
+using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 
 namespace Okomos.SharedKernel.Tests.Behaviors;
@@ -9,12 +10,18 @@ namespace Okomos.SharedKernel.Tests.Behaviors;
 public class DomainEventsDecoratorTests
 {
     [Fact]
-    public async Task Should_Dispatch_Pending_Events_After_Handler_Completes()
+    public async Task Should_Dispatch_Pending_Events_And_Save_After_Handler_Completes()
     {
         var inner = new TestCommandHandler();
         var dispatcher = Substitute.For<IDomainEventDispatcher>();
 
-        var decorator = new DomainEventsCommandDecorator<TestCommand, string>(inner, dispatcher);
+        var options = new DbContextOptionsBuilder<TestDbContext>()
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
+            .Options;
+
+        await using var dbContext = new TestDbContext(options);
+
+        var decorator = new DomainEventsCommandDecorator<TestCommand, string, TestDbContext>(inner, dispatcher, dbContext);
 
         var result = await decorator.HandleAsync(new TestCommand("events"));
 

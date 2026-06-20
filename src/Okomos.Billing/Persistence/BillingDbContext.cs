@@ -1,5 +1,4 @@
 using Okomos.Billing.Persistence.Entities;
-using Okomos.SharedKernel.Abstractions.Events;
 using Okomos.SharedKernel.Abstractions.Multitenancy;
 using Okomos.SharedKernel.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -10,8 +9,7 @@ public sealed class BillingDbContext : BaseDbContext
 {
     public BillingDbContext(
         DbContextOptions<BillingDbContext> options,
-        ITenantProvider tenantProvider,
-        IEventBus eventBus) : base(options, tenantProvider, eventBus)
+        ITenantProvider tenantProvider) : base(options, tenantProvider)
     {
     }
 

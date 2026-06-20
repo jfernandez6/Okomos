@@ -19,13 +19,12 @@ public class AccountingIntegrationTests
     {
         var tenantId = Guid.NewGuid();
         var tenantProvider = new TestTenantProvider(tenantId);
-        var eventBus = new TestEventBus();
 
         var options = new DbContextOptionsBuilder<AccountingDbContext>()
             .UseSqlServer(_fixture.ConnectionString)
             .Options;
 
-        await using var dbContext = new AccountingDbContext(options, tenantProvider, eventBus);
+        await using var dbContext = new AccountingDbContext(options, tenantProvider);
 
         var createHandler = new CreateJournalEntryCommandHandler(dbContext, tenantProvider);
         var entryId = await createHandler.HandleAsync(new CreateJournalEntryCommand("SQL Entry", 500m, 500m));

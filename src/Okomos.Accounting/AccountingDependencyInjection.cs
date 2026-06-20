@@ -27,6 +27,7 @@ public static class AccountingDependencyInjection
         services.AddOutboxStore<AccountingDbContext>();
         services.AddDomainEventDispatcher<AccountingDbContext>();
 
+        services.AddScoped<IDomainEventHandler<JournalEntryCreatedEvent>, JournalEntryCreatedDomainEventHandler>();
         services.AddScoped<IIntegrationEventHandler<InvoiceCreatedIntegrationEvent>, InvoiceCreatedIntegrationEventHandler>();
 
         services.AddScoped<IValidator<CreateJournalEntryCommand>, CreateJournalEntryCommandValidator>();

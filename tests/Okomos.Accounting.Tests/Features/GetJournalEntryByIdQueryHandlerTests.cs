@@ -14,13 +14,12 @@ public class GetJournalEntryByIdQueryHandlerTests
     {
         var tenantId = Guid.NewGuid();
         var tenantProvider = new TestTenantProvider(tenantId);
-        var eventBus = new TestEventBus();
 
         var options = new DbContextOptionsBuilder<AccountingDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
 
-        await using var dbContext = new AccountingDbContext(options, tenantProvider, eventBus);
+        await using var dbContext = new AccountingDbContext(options, tenantProvider);
         var entry = JournalEntry.Create(tenantId, "Query test", 200m, 200m);
         dbContext.JournalEntries.Add(entry);
         await dbContext.SaveChangesAsync();

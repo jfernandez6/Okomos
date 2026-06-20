@@ -3,6 +3,7 @@ using Okomos.SharedKernel.Abstractions.Outbox;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 
 namespace Okomos.SharedKernel.Outbox;
@@ -11,19 +12,21 @@ public sealed class OutboxProcessorHostedService : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<OutboxProcessorHostedService> _logger;
-    private readonly TimeSpan _pollingInterval = TimeSpan.FromSeconds(10);
+    private readonly OutboxOptions _options;
 
     public OutboxProcessorHostedService(
         IServiceProvider serviceProvider,
-        ILogger<OutboxProcessorHostedService> logger)
+        ILogger<OutboxProcessorHostedService> logger,
+        IOptions<OutboxOptions> options)
     {
         _serviceProvider = serviceProvider;
         _logger = logger;
+        _options = options.Value;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("Outbox processor started");
+        _logger.LogInformation("Outbox processor started (polling interval: {Interval}s)", _options.PollingIntervalSeconds);
 
         while (!stoppingToken.IsCancellationRequested)
         {
@@ -36,11 +39,11 @@ public sealed class OutboxProcessorHostedService : BackgroundService
                 _logger.LogError(ex, "Error processing outbox messages");
             }
 
-            await Task.Delay(_pollingInterval, stoppingToken);
+            await Task.Delay(TimeSpan.FromSeconds(_options.PollingIntervalSeconds), stoppingToken);
         }
     }
 
-    private async Task ProcessOutboxMessagesAsync(CancellationToken cancellationToken)
+    internal async Task ProcessOutboxMessagesAsync(CancellationToken cancellationToken)
     {
         using var scope = _serviceProvider.CreateScope();
         var registrations = scope.ServiceProvider.GetServices<OutboxStoreRegistration>();
@@ -50,7 +53,7 @@ public sealed class OutboxProcessorHostedService : BackgroundService
         {
             var storeType = typeof(IOutboxStore<>).MakeGenericType(registration.DbContextType);
             var outboxStore = (IOutboxStore)scope.ServiceProvider.GetRequiredService(storeType);
-            var messages = await outboxStore.GetPendingAsync(20, cancellationToken);
+            var messages = await outboxStore.GetPendingAsync(_options.BatchSize, cancellationToken);
 
             foreach (var message in messages)
             {
@@ -85,4 +88,10 @@ public sealed class OutboxProcessorHostedService : BackgroundService
             }
         }
     }
+}
+
+public sealed class OutboxOptions
+{
+    public int PollingIntervalSeconds { get; set; } = 10;
+    public int BatchSize { get; set; } = 20;
 }

@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Okomos.SharedKernel.Tests" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 

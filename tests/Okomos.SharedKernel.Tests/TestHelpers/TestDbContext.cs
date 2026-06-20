@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Okomos.SharedKernel.Tests.TestHelpers;
 
-public sealed class TestDbContext : DbContext
+public class TestDbContext : DbContext
 {
     public TestDbContext(DbContextOptions<TestDbContext> options) : base(options) { }
 

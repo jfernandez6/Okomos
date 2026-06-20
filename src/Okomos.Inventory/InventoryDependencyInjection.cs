@@ -1,8 +1,11 @@
+using Okomos.Inventory.EventHandlers;
 using Okomos.Inventory.Features.CreateProduct;
 using Okomos.Inventory.Features.GetProductById;
 using Okomos.Inventory.Persistence;
 using Okomos.SharedKernel;
+using Okomos.SharedKernel.Abstractions.Events;
 using Okomos.SharedKernel.Behaviors.Validation;
+using Okomos.SharedKernel.IntegrationEvents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +26,9 @@ public static class InventoryDependencyInjection
 
         services.AddOutboxStore<InventoryDbContext>();
         services.AddDomainEventDispatcher<InventoryDbContext>();
+
+        services.AddScoped<IDomainEventHandler<ProductCreatedEvent>, ProductCreatedDomainEventHandler>();
+        services.AddScoped<IIntegrationEventHandler<JournalEntryCreatedIntegrationEvent>, JournalEntryCreatedIntegrationEventHandler>();
 
         services.AddScoped<IValidator<CreateProductCommand>, CreateProductCommandValidator>();
         services.AddCommandHandler<CreateProductCommand, Guid, CreateProductCommandHandler, InventoryDbContext>();

@@ -27,7 +27,6 @@ public sealed class OutboxStore<TDbContext> : IOutboxStore<TDbContext>
         };
 
         _dbContext.Set<OutboxMessage>().Add(message);
-        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<IReadOnlyList<OutboxMessage>> GetPendingAsync(int batchSize, CancellationToken cancellationToken = default)

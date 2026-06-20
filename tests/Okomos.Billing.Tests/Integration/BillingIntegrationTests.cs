@@ -22,13 +22,12 @@ public class BillingIntegrationTests
     {
         var tenantId = Guid.NewGuid();
         var tenantProvider = new TestTenantProvider(tenantId);
-        var eventBus = new TestEventBus();
 
         var options = new DbContextOptionsBuilder<BillingDbContext>()
             .UseSqlServer(_fixture.ConnectionString)
             .Options;
 
-        await using var dbContext = new BillingDbContext(options, tenantProvider, eventBus);
+        await using var dbContext = new BillingDbContext(options, tenantProvider);
 
         var createHandler = new CreateInvoiceCommandHandler(dbContext, tenantProvider);
         var invoiceId = await createHandler.HandleAsync(new CreateInvoiceCommand("SQL Customer", 1200m, "MXN"));

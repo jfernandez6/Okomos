@@ -29,9 +29,8 @@ public sealed class InventorySqlServerFixture : IAsyncLifetime
             .Options;
 
         var tenantProvider = new TestTenantProvider(Guid.NewGuid());
-        var eventBus = new TestEventBus();
 
-        await using var context = new InventoryDbContext(options, tenantProvider, eventBus);
+        await using var context = new InventoryDbContext(options, tenantProvider);
         await context.Database.EnsureCreatedAsync();
     }
 

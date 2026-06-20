@@ -13,13 +13,12 @@ public class CreateInvoiceCommandHandlerTests
     {
         var tenantId = Guid.NewGuid();
         var tenantProvider = new TestTenantProvider(tenantId);
-        var eventBus = new TestEventBus();
 
         var options = new DbContextOptionsBuilder<BillingDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
 
-        await using var dbContext = new BillingDbContext(options, tenantProvider, eventBus);
+        await using var dbContext = new BillingDbContext(options, tenantProvider);
         var handler = new CreateInvoiceCommandHandler(dbContext, tenantProvider);
 
         var command = new CreateInvoiceCommand("Acme Corp", 500m, "MXN");
@@ -31,7 +30,7 @@ public class CreateInvoiceCommandHandlerTests
         invoice.CustomerName.Should().Be("Acme Corp");
         invoice.Amount.Should().Be(500m);
         invoice.TenantId.Should().Be(tenantId);
-        eventBus.DomainEvents.Should().ContainSingle()
+        invoice.DomainEvents.Should().ContainSingle()
             .Which.Should().BeOfType<InvoiceCreatedEvent>();
     }
 }

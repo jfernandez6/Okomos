@@ -35,12 +35,13 @@ public class OutboxStoreTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task AddAsync_Should_Persist_Outbox_Message()
+    public async Task AddAsync_Should_Add_Outbox_Message_To_Change_Tracker()
     {
         var tenantId = Guid.NewGuid();
         var integrationEvent = new InvoiceCreatedIntegrationEvent(Guid.NewGuid(), tenantId, 100m);
 
         await _outboxStore.AddAsync(integrationEvent, tenantId);
+        await _dbContext.SaveChangesAsync();
 
         var messages = await _dbContext.OutboxMessages.ToListAsync();
         messages.Should().ContainSingle();
@@ -54,6 +55,7 @@ public class OutboxStoreTests : IAsyncLifetime
     {
         var integrationEvent = new InvoiceCreatedIntegrationEvent(Guid.NewGuid(), Guid.NewGuid(), 50m);
         await _outboxStore.AddAsync(integrationEvent, Guid.NewGuid());
+        await _dbContext.SaveChangesAsync();
 
         var pending = await _outboxStore.GetPendingAsync(10);
 
@@ -65,6 +67,7 @@ public class OutboxStoreTests : IAsyncLifetime
     {
         var integrationEvent = new InvoiceCreatedIntegrationEvent(Guid.NewGuid(), Guid.NewGuid(), 75m);
         await _outboxStore.AddAsync(integrationEvent, Guid.NewGuid());
+        await _dbContext.SaveChangesAsync();
         var messageId = (await _dbContext.OutboxMessages.SingleAsync()).Id;
 
         await _outboxStore.MarkAsProcessedAsync(messageId);
@@ -79,6 +82,7 @@ public class OutboxStoreTests : IAsyncLifetime
     {
         var integrationEvent = new InvoiceCreatedIntegrationEvent(Guid.NewGuid(), Guid.NewGuid(), 25m);
         await _outboxStore.AddAsync(integrationEvent, Guid.NewGuid());
+        await _dbContext.SaveChangesAsync();
         var messageId = (await _dbContext.OutboxMessages.SingleAsync()).Id;
 
         await _outboxStore.MarkAsFailedAsync(messageId, "test error");

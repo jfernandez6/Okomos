@@ -19,13 +19,12 @@ public class InventoryIntegrationTests
     {
         var tenantId = Guid.NewGuid();
         var tenantProvider = new TestTenantProvider(tenantId);
-        var eventBus = new TestEventBus();
 
         var options = new DbContextOptionsBuilder<InventoryDbContext>()
             .UseSqlServer(_fixture.ConnectionString)
             .Options;
 
-        await using var dbContext = new InventoryDbContext(options, tenantProvider, eventBus);
+        await using var dbContext = new InventoryDbContext(options, tenantProvider);
 
         var createHandler = new CreateProductCommandHandler(dbContext, tenantProvider);
         var productId = await createHandler.HandleAsync(new CreateProductCommand("SQL Product", "SQL-001", 20, 45m));

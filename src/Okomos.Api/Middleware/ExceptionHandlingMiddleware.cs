@@ -31,17 +31,6 @@ public sealed class ExceptionHandlingMiddleware
                 errors = ex.Errors
             }));
         }
-        catch (NotFoundException ex)
-        {
-            _logger.LogWarning("Not found: {Message}", ex.Message);
-            context.Response.StatusCode = StatusCodes.Status404NotFound;
-            context.Response.ContentType = "application/json";
-            await context.Response.WriteAsync(JsonSerializer.Serialize(new
-            {
-                type = "NotFound",
-                message = ex.Message
-            }));
-        }
         catch (InvalidOperationException ex) when (ex.Message.Contains("Tenant context", StringComparison.OrdinalIgnoreCase))
         {
             _logger.LogWarning("Tenant error: {Message}", ex.Message);

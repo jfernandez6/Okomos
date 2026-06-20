@@ -13,13 +13,12 @@ public class CreateProductCommandHandlerTests
     {
         var tenantId = Guid.NewGuid();
         var tenantProvider = new TestTenantProvider(tenantId);
-        var eventBus = new TestEventBus();
 
         var options = new DbContextOptionsBuilder<InventoryDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
 
-        await using var dbContext = new InventoryDbContext(options, tenantProvider, eventBus);
+        await using var dbContext = new InventoryDbContext(options, tenantProvider);
         var handler = new CreateProductCommandHandler(dbContext, tenantProvider);
 
         var productId = await handler.HandleAsync(new CreateProductCommand("Widget", "W-001", 10, 99.99m));
@@ -29,6 +28,6 @@ public class CreateProductCommandHandlerTests
         product.Name.Should().Be("Widget");
         product.Sku.Should().Be("W-001");
         product.TenantId.Should().Be(tenantId);
-        eventBus.DomainEvents.Should().ContainSingle();
+        product.DomainEvents.Should().ContainSingle();
     }
 }

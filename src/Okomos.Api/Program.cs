@@ -17,7 +17,7 @@ builder.Services.AddApplicationInsightsTelemetry(options =>
     options.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
 });
 
-builder.Services.AddSharedKernel();
+builder.Services.AddSharedKernel(builder.Configuration);
 builder.Services.AddIdentityModule(builder.Configuration);
 builder.Services.AddBillingModule(builder.Configuration);
 builder.Services.AddAccountingModule(builder.Configuration);

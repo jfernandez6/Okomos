@@ -5,6 +5,7 @@ using Okomos.Billing.Persistence;
 using Okomos.SharedKernel;
 using Okomos.SharedKernel.Abstractions.Events;
 using Okomos.SharedKernel.Behaviors.Validation;
+using Okomos.SharedKernel.IntegrationEvents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +28,7 @@ public static class BillingDependencyInjection
         services.AddDomainEventDispatcher<BillingDbContext>();
 
         services.AddScoped<IDomainEventHandler<InvoiceCreatedEvent>, InvoiceCreatedDomainEventHandler>();
+        services.AddScoped<IIntegrationEventHandler<ProductCreatedIntegrationEvent>, ProductCreatedIntegrationEventHandler>();
 
         services.AddScoped<IValidator<CreateInvoiceCommand>, CreateInvoiceCommandValidator>();
         services.AddCommandHandler<CreateInvoiceCommand, Guid, CreateInvoiceCommandHandler, BillingDbContext>();

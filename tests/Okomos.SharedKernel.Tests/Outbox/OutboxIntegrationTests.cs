@@ -9,6 +9,7 @@ using Okomos.SharedKernel.Tests.TestHelpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 using Testcontainers.MsSql;
 
@@ -40,6 +41,8 @@ public class OutboxIntegrationTests
         services.AddSingleton(integrationHandler);
         services.AddSingleton<IEventBus, EventBus>();
 
+        services.Configure<OutboxOptions>(_ => { });
+
         await using var provider = services.BuildServiceProvider();
         await using var scope = provider.CreateAsyncScope();
 
@@ -52,12 +55,14 @@ public class OutboxIntegrationTests
         var integrationEvent = new InvoiceCreatedIntegrationEvent(invoiceId, tenantId, 999.99m);
 
         await outboxStore.AddAsync(integrationEvent, tenantId);
+        await dbContext.SaveChangesAsync();
 
         var processor = new OutboxProcessorHostedService(
             provider,
-            scope.ServiceProvider.GetRequiredService<ILogger<OutboxProcessorHostedService>>());
+            provider.GetRequiredService<ILogger<OutboxProcessorHostedService>>(),
+            provider.GetRequiredService<IOptions<OutboxOptions>>());
 
-        await InvokeProcessOutbox(processor);
+        await processor.ProcessOutboxMessagesAsync(CancellationToken.None);
 
         await integrationHandler.Received(1).HandleAsync(
             Arg.Is<InvoiceCreatedIntegrationEvent>(e => e.InvoiceId == invoiceId),
@@ -65,13 +70,5 @@ public class OutboxIntegrationTests
 
         var message = await dbContext.OutboxMessages.SingleAsync();
         message.ProcessedOn.Should().NotBeNull();
-    }
-
-    private static async Task InvokeProcessOutbox(OutboxProcessorHostedService processor)
-    {
-        var method = typeof(OutboxProcessorHostedService)
-            .GetMethod("ProcessOutboxMessagesAsync", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-
-        await (Task)method!.Invoke(processor, [CancellationToken.None])!;
     }
 }
