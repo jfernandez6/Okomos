@@ -1,10 +1,19 @@
-using Okomos.Accounting;
+using Accounting.Api.Endpoints.CreateJournalEntry;
+using Accounting.Application.Features.CreateJournalEntry;
+using Accounting.Module;
+using Billing.Api.Endpoints.CreateInvoice;
+using Billing.Application.Features.CreateInvoice;
+using Billing.Module;
+using Identity.Api.Endpoints;
+using Identity.Application.Features.Register;
+using Identity.Module;
+using Inventory.Api.Endpoints.CreateProduct;
+using Inventory.Application.Features.CreateProduct;
+using Inventory.Module;
+using Okomos.Api.Endpoints;
 using Okomos.Api.Middleware;
-using Okomos.Billing;
-using Okomos.Identity;
-using Okomos.Inventory;
-using Okomos.SharedKernel;
-using Okomos.SharedKernel.Multitenancy;
+using Okomos.Infrastructure;
+using Okomos.Infrastructure.Multitenancy;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
@@ -17,7 +26,7 @@ builder.Services.AddApplicationInsightsTelemetry(options =>
     options.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
 });
 
-builder.Services.AddSharedKernel(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddIdentityModule(builder.Configuration);
 builder.Services.AddBillingModule(builder.Configuration);
 builder.Services.AddAccountingModule(builder.Configuration);
@@ -27,11 +36,15 @@ builder.Services.AddFastEndpoints(o =>
 {
     o.Assemblies =
     [
-        typeof(IdentityDependencyInjection).Assembly,
-        typeof(BillingDependencyInjection).Assembly,
-        typeof(AccountingDependencyInjection).Assembly,
-        typeof(InventoryDependencyInjection).Assembly,
-        typeof(Program).Assembly
+        typeof(HealthEndpoint).Assembly,
+        typeof(RegisterEndpoint).Assembly,
+        typeof(RegisterHandler).Assembly,
+        typeof(CreateInvoiceEndpoint).Assembly,
+        typeof(CreateInvoiceHandler).Assembly,
+        typeof(CreateJournalEntryEndpoint).Assembly,
+        typeof(CreateJournalEntryHandler).Assembly,
+        typeof(CreateProductEndpoint).Assembly,
+        typeof(CreateProductHandler).Assembly
     ];
 });
 

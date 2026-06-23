@@ -20,11 +20,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Okomos.SharedKernel\Okomos.SharedKernel.csproj" />
-    <ProjectReference Include="..\Okomos.Identity\Okomos.Identity.csproj" />
-    <ProjectReference Include="..\Okomos.Billing\Okomos.Billing.csproj" />
-    <ProjectReference Include="..\Okomos.Accounting\Okomos.Accounting.csproj" />
-    <ProjectReference Include="..\Okomos.Inventory\Okomos.Inventory.csproj" />
+    <ProjectReference Include="..\Okomos.Infrastructure\Okomos.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Identity\Identity.Module\Identity.Module.csproj" />
+    <ProjectReference Include="..\Modules\Billing\Billing.Module\Billing.Module.csproj" />
+    <ProjectReference Include="..\Modules\Accounting\Accounting.Module\Accounting.Module.csproj" />
+    <ProjectReference Include="..\Modules\Inventory\Inventory.Module\Inventory.Module.csproj" />
   </ItemGroup>
 
 </Project>

@@ -31,7 +31,9 @@ public sealed class ExceptionHandlingMiddleware
                 errors = ex.Errors
             }));
         }
-        catch (InvalidOperationException ex) when (ex.Message.Contains("Tenant context", StringComparison.OrdinalIgnoreCase))
+        catch (InvalidOperationException ex) when (
+            ex.Message.Contains("Tenant context", StringComparison.OrdinalIgnoreCase)
+            || ex.Message.Contains("Tenant is required", StringComparison.OrdinalIgnoreCase))
         {
             _logger.LogWarning("Tenant error: {Message}", ex.Message);
             context.Response.StatusCode = StatusCodes.Status400BadRequest;

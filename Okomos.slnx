@@ -1,17 +1,42 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="src/Okomos.Accounting/Okomos.Accounting.csproj" />
     <Project Path="src/Okomos.Api/Okomos.Api.csproj" />
-    <Project Path="src/Okomos.Billing/Okomos.Billing.csproj" />
-    <Project Path="src/Okomos.Identity/Okomos.Identity.csproj" />
-    <Project Path="src/Okomos.Inventory/Okomos.Inventory.csproj" />
+    <Project Path="src/Okomos.Infrastructure/Okomos.Infrastructure.csproj" />
     <Project Path="src/Okomos.SharedKernel/Okomos.SharedKernel.csproj" />
   </Folder>
+  <Folder Name="/src/Modules/Identity/">
+    <Project Path="src/Modules/Identity/Identity.Api/Identity.Api.csproj" />
+    <Project Path="src/Modules/Identity/Identity.Application/Identity.Application.csproj" />
+    <Project Path="src/Modules/Identity/Identity.Domain/Identity.Domain.csproj" />
+    <Project Path="src/Modules/Identity/Identity.Infrastructure/Identity.Infrastructure.csproj" />
+    <Project Path="src/Modules/Identity/Identity.Module/Identity.Module.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Billing/">
+    <Project Path="src/Modules/Billing/Billing.Api/Billing.Api.csproj" />
+    <Project Path="src/Modules/Billing/Billing.Application/Billing.Application.csproj" />
+    <Project Path="src/Modules/Billing/Billing.Domain/Billing.Domain.csproj" />
+    <Project Path="src/Modules/Billing/Billing.Infrastructure/Billing.Infrastructure.csproj" />
+    <Project Path="src/Modules/Billing/Billing.Module/Billing.Module.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Accounting/">
+    <Project Path="src/Modules/Accounting/Accounting.Api/Accounting.Api.csproj" />
+    <Project Path="src/Modules/Accounting/Accounting.Application/Accounting.Application.csproj" />
+    <Project Path="src/Modules/Accounting/Accounting.Domain/Accounting.Domain.csproj" />
+    <Project Path="src/Modules/Accounting/Accounting.Infrastructure/Accounting.Infrastructure.csproj" />
+    <Project Path="src/Modules/Accounting/Accounting.Module/Accounting.Module.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Inventory/">
+    <Project Path="src/Modules/Inventory/Inventory.Api/Inventory.Api.csproj" />
+    <Project Path="src/Modules/Inventory/Inventory.Application/Inventory.Application.csproj" />
+    <Project Path="src/Modules/Inventory/Inventory.Domain/Inventory.Domain.csproj" />
+    <Project Path="src/Modules/Inventory/Inventory.Infrastructure/Inventory.Infrastructure.csproj" />
+    <Project Path="src/Modules/Inventory/Inventory.Module/Inventory.Module.csproj" />
+  </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/Okomos.Accounting.Tests/Okomos.Accounting.Tests.csproj" />
-    <Project Path="tests/Okomos.Billing.Tests/Okomos.Billing.Tests.csproj" />
-    <Project Path="tests/Okomos.Identity.Tests/Okomos.Identity.Tests.csproj" />
-    <Project Path="tests/Okomos.Inventory.Tests/Okomos.Inventory.Tests.csproj" />
-    <Project Path="tests/Okomos.SharedKernel.Tests/Okomos.SharedKernel.Tests.csproj" />
+    <Project Path="tests/Modules/Identity.Tests/Identity.Tests.csproj" />
+    <Project Path="tests/Modules/Billing.Tests/Billing.Tests.csproj" />
+    <Project Path="tests/Modules/Accounting.Tests/Accounting.Tests.csproj" />
+    <Project Path="tests/Modules/Inventory.Tests/Inventory.Tests.csproj" />
+    <Project Path="tests/Okomos.Infrastructure.Tests/Okomos.Infrastructure.Tests.csproj" />
   </Folder>
 </Solution>

@@ -1,6 +1,83 @@
-@Okomos.Api_HostAddress = http://localhost:5250
+@host = http://localhost:5250
+@tenantId = 00000000-0000-0000-0000-000000000001
 
-GET {{Okomos.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+### Health
+GET {{host}}/health
 
-###
+### Register
+POST {{host}}/identity/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "Password123!",
+  "firstName": "Jane",
+  "lastName": "Doe"
+}
+
+### Login
+# @name login
+POST {{host}}/identity/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "Password123!"
+}
+
+### Refresh
+POST {{host}}/identity/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{login.response.body.refreshToken}}"
+}
+
+### Create invoice
+# @name createInvoice
+POST {{host}}/billing/invoices
+Content-Type: application/json
+X-Tenant: {{tenantId}}
+
+{
+  "customerName": "Acme Corp",
+  "amount": 150.00,
+  "currency": "USD"
+}
+
+### Get invoice
+GET {{host}}/billing/invoices/{{createInvoice.response.body.id}}
+X-Tenant: {{tenantId}}
+
+### Create journal entry
+# @name createJournalEntry
+POST {{host}}/accounting/journal-entries
+Content-Type: application/json
+X-Tenant: {{tenantId}}
+
+{
+  "description": "Invoice revenue",
+  "debit": 150.00,
+  "credit": 150.00
+}
+
+### Get journal entry
+GET {{host}}/accounting/journal-entries/{{createJournalEntry.response.body.id}}
+X-Tenant: {{tenantId}}
+
+### Create product
+# @name createProduct
+POST {{host}}/inventory/products
+Content-Type: application/json
+X-Tenant: {{tenantId}}
+
+{
+  "name": "Widget",
+  "sku": "WDG-001",
+  "quantityOnHand": 100,
+  "unitPrice": 9.99
+}
+
+### Get product
+GET {{host}}/inventory/products/{{createProduct.response.body.id}}
+X-Tenant: {{tenantId}}

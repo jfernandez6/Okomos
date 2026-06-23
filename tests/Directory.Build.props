@@ -11,12 +11,14 @@
   <ItemGroup>
     <Using Include="Xunit" />
     <Using Include="FluentAssertions" />
+    <Using Include="NSubstitute" />
     <Using Include="Okomos.Tests.Shared" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Shared\DockerHelper.cs" Link="Shared\DockerHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Shared\TestDoubles.cs" Link="Shared\TestDoubles.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Shared\DbContextOptionsHelper.cs" Link="Shared\DbContextOptionsHelper.cs" />
   </ItemGroup>
 
   <ItemGroup>
