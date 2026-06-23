@@ -25,7 +25,6 @@ public static class BillingDependencyInjection
                 sql.MigrationsHistoryTable("__EFMigrationsHistory", "billing")));
 
         services.AddOutboxStore<BillingDbContext>();
-        services.AddDomainEventDispatcher<BillingDbContext>();
 
         services.AddScoped<IDomainEventHandler<InvoiceCreatedEvent>, InvoiceCreatedDomainEventHandler>();
         services.AddScoped<IIntegrationEventHandler<ProductCreatedIntegrationEvent>, ProductCreatedIntegrationEventHandler>();

@@ -26,7 +26,7 @@ public class CreateInvoiceCommandHandlerTests
 
         invoiceId.Should().NotBeEmpty();
 
-        var invoice = await dbContext.Invoices.SingleAsync();
+        var invoice = dbContext.Invoices.Local.Single();
         invoice.CustomerName.Should().Be("Acme Corp");
         invoice.Amount.Should().Be(500m);
         invoice.TenantId.Should().Be(tenantId);

@@ -25,7 +25,6 @@ public static class InventoryDependencyInjection
                 sql.MigrationsHistoryTable("__EFMigrationsHistory", "inventory")));
 
         services.AddOutboxStore<InventoryDbContext>();
-        services.AddDomainEventDispatcher<InventoryDbContext>();
 
         services.AddScoped<IDomainEventHandler<ProductCreatedEvent>, ProductCreatedDomainEventHandler>();
         services.AddScoped<IIntegrationEventHandler<JournalEntryCreatedIntegrationEvent>, JournalEntryCreatedIntegrationEventHandler>();

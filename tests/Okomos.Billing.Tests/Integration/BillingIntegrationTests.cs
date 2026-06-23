@@ -31,6 +31,7 @@ public class BillingIntegrationTests
 
         var createHandler = new CreateInvoiceCommandHandler(dbContext, tenantProvider);
         var invoiceId = await createHandler.HandleAsync(new CreateInvoiceCommand("SQL Customer", 1200m, "MXN"));
+        await dbContext.SaveChangesAsync();
 
         var queryHandler = new GetInvoiceByIdQueryHandler(dbContext);
         var invoice = await queryHandler.HandleAsync(new GetInvoiceByIdQuery(invoiceId));

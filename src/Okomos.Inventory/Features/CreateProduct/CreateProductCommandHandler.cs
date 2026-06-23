@@ -16,15 +16,14 @@ public sealed class CreateProductCommandHandler : ICommandHandler<CreateProductC
         _tenantProvider = tenantProvider;
     }
 
-    public async Task<Guid> HandleAsync(CreateProductCommand command, CancellationToken cancellationToken = default)
+    public Task<Guid> HandleAsync(CreateProductCommand command, CancellationToken cancellationToken = default)
     {
         var tenantId = _tenantProvider.CurrentTenantId
             ?? throw new InvalidOperationException("Tenant is required.");
 
         var product = Product.Create(tenantId, command.Name, command.Sku, command.QuantityOnHand, command.UnitPrice);
         _dbContext.Products.Add(product);
-        await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return product.Id;
+        return Task.FromResult(product.Id);
     }
 }

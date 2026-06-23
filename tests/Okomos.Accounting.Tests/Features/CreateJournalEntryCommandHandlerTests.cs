@@ -24,7 +24,7 @@ public class CreateJournalEntryCommandHandlerTests
         var entryId = await handler.HandleAsync(new CreateJournalEntryCommand("Test entry", 100m, 100m));
 
         entryId.Should().NotBeEmpty();
-        var entry = await dbContext.JournalEntries.SingleAsync();
+        var entry = dbContext.JournalEntries.Local.Single();
         entry.Description.Should().Be("Test entry");
         entry.TenantId.Should().Be(tenantId);
         entry.DomainEvents.Should().ContainSingle();

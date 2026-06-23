@@ -28,6 +28,7 @@ public class AccountingIntegrationTests
 
         var createHandler = new CreateJournalEntryCommandHandler(dbContext, tenantProvider);
         var entryId = await createHandler.HandleAsync(new CreateJournalEntryCommand("SQL Entry", 500m, 500m));
+        await dbContext.SaveChangesAsync();
 
         var queryHandler = new GetJournalEntryByIdQueryHandler(dbContext);
         var entry = await queryHandler.HandleAsync(new GetJournalEntryByIdQuery(entryId));

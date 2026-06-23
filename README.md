@@ -18,9 +18,9 @@ src/
 
 - **Vertical Slices**: cada feature agrupa Command/Query, Handler, Validator y endpoints.
 - **CQRS manual**: sin MediatR, handlers registrados con pipeline de decorators.
-- **Pipeline Decorator**: Validación → Logging → Multitenancy → Transacciones → Domain Events.
-- **Domain Events**: dispatch automático al final de `SaveChanges`.
-- **Integration Events**: Outbox Pattern + `OutboxProcessorHostedService`.
+- **Pipeline Decorator**: Validación → Logging → Multitenancy → Transacciones → Domain Events → `SaveChanges`.
+- **Domain Events**: los handlers solo agregan/modifican entidades; el `DomainEventsCommandDecorator` despacha eventos pendientes y persiste en un único `SaveChanges` dentro de la transacción.
+- **Integration Events**: Outbox Pattern + `OutboxProcessorHostedService` (intervalo y batch configurables vía `Outbox` en appsettings).
 - **Outbox por módulo**: cada módulo registra `IOutboxStore<TDbContext>` (ej. `IOutboxStore<BillingDbContext>`).
 
 ## Migraciones (ejecutar manualmente)
@@ -55,6 +55,7 @@ Configurar en Application Settings:
 - `ConnectionStrings__IdentityConnection` (opcional, usa DefaultConnection si vacío)
 - `Jwt__Key`
 - `ApplicationInsights__ConnectionString`
+- `Outbox__PollingIntervalSeconds`, `Outbox__BatchSize`
 - `Cors__AllowedOrigins__0`, `Cors__AllowedOrigins__1`, etc.
 
 ## Multitenancy

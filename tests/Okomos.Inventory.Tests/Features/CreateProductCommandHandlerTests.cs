@@ -24,7 +24,7 @@ public class CreateProductCommandHandlerTests
         var productId = await handler.HandleAsync(new CreateProductCommand("Widget", "W-001", 10, 99.99m));
 
         productId.Should().NotBeEmpty();
-        var product = await dbContext.Products.SingleAsync();
+        var product = dbContext.Products.Local.Single();
         product.Name.Should().Be("Widget");
         product.Sku.Should().Be("W-001");
         product.TenantId.Should().Be(tenantId);

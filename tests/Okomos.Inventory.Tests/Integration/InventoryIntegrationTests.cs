@@ -28,6 +28,7 @@ public class InventoryIntegrationTests
 
         var createHandler = new CreateProductCommandHandler(dbContext, tenantProvider);
         var productId = await createHandler.HandleAsync(new CreateProductCommand("SQL Product", "SQL-001", 20, 45m));
+        await dbContext.SaveChangesAsync();
 
         var queryHandler = new GetProductByIdQueryHandler(dbContext);
         var product = await queryHandler.HandleAsync(new GetProductByIdQuery(productId));

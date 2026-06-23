@@ -16,15 +16,14 @@ public sealed class CreateInvoiceCommandHandler : ICommandHandler<CreateInvoiceC
         _tenantProvider = tenantProvider;
     }
 
-    public async Task<Guid> HandleAsync(CreateInvoiceCommand command, CancellationToken cancellationToken = default)
+    public Task<Guid> HandleAsync(CreateInvoiceCommand command, CancellationToken cancellationToken = default)
     {
         var tenantId = _tenantProvider.CurrentTenantId
             ?? throw new InvalidOperationException("Tenant is required.");
 
         var invoice = Invoice.Create(tenantId, command.CustomerName, command.Amount, command.Currency);
         _dbContext.Invoices.Add(invoice);
-        await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return invoice.Id;
+        return Task.FromResult(invoice.Id);
     }
 }

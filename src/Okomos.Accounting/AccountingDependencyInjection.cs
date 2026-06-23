@@ -25,7 +25,6 @@ public static class AccountingDependencyInjection
                 sql.MigrationsHistoryTable("__EFMigrationsHistory", "accounting")));
 
         services.AddOutboxStore<AccountingDbContext>();
-        services.AddDomainEventDispatcher<AccountingDbContext>();
 
         services.AddScoped<IDomainEventHandler<JournalEntryCreatedEvent>, JournalEntryCreatedDomainEventHandler>();
         services.AddScoped<IIntegrationEventHandler<InvoiceCreatedIntegrationEvent>, InvoiceCreatedIntegrationEventHandler>();

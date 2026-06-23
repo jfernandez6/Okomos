@@ -45,10 +45,14 @@ public static class SharedKernelDependencyInjection
 
             if (useDomainEvents)
             {
+                var dbContext = sp.GetRequiredService<TDbContext>();
                 handler = new DomainEventsCommandDecorator<TCommand, TResult, TDbContext>(
                     handler,
-                    sp.GetRequiredService<IDomainEventDispatcher>(),
-                    sp.GetRequiredService<TDbContext>());
+                    new DomainEventDispatcher(
+                        dbContext,
+                        sp.GetRequiredService<IEventBus>(),
+                        sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<DomainEventDispatcher>>()),
+                    dbContext);
             }
 
             if (useTransaction)
@@ -107,18 +111,6 @@ public static class SharedKernelDependencyInjection
 
             return handler;
         });
-
-        return services;
-    }
-
-    public static IServiceCollection AddDomainEventDispatcher<TDbContext>(this IServiceCollection services)
-        where TDbContext : DbContext
-    {
-        services.AddScoped<IDomainEventDispatcher>(sp =>
-            new DomainEventDispatcher(
-                sp.GetRequiredService<TDbContext>(),
-                sp.GetRequiredService<IEventBus>(),
-                sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<DomainEventDispatcher>>()));
 
         return services;
     }

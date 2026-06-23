@@ -16,15 +16,14 @@ public sealed class CreateJournalEntryCommandHandler : ICommandHandler<CreateJou
         _tenantProvider = tenantProvider;
     }
 
-    public async Task<Guid> HandleAsync(CreateJournalEntryCommand command, CancellationToken cancellationToken = default)
+    public Task<Guid> HandleAsync(CreateJournalEntryCommand command, CancellationToken cancellationToken = default)
     {
         var tenantId = _tenantProvider.CurrentTenantId
             ?? throw new InvalidOperationException("Tenant is required.");
 
         var entry = JournalEntry.Create(tenantId, command.Description, command.Debit, command.Credit);
         _dbContext.JournalEntries.Add(entry);
-        await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return entry.Id;
+        return Task.FromResult(entry.Id);
     }
 }
