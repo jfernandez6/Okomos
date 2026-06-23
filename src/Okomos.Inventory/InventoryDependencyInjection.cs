@@ -4,7 +4,6 @@ using Okomos.Inventory.Features.GetProductById;
 using Okomos.Inventory.Persistence;
 using Okomos.SharedKernel;
 using Okomos.SharedKernel.Abstractions.Events;
-using Okomos.SharedKernel.Behaviors.Validation;
 using Okomos.SharedKernel.IntegrationEvents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -29,7 +28,6 @@ public static class InventoryDependencyInjection
         services.AddScoped<IDomainEventHandler<ProductCreatedEvent>, ProductCreatedDomainEventHandler>();
         services.AddScoped<IIntegrationEventHandler<JournalEntryCreatedIntegrationEvent>, JournalEntryCreatedIntegrationEventHandler>();
 
-        services.AddScoped<IValidator<CreateProductCommand>, CreateProductCommandValidator>();
         services.AddCommandHandler<CreateProductCommand, Guid, CreateProductCommandHandler, InventoryDbContext>();
 
         services.AddQueryHandler<GetProductByIdQuery, ProductDto?, GetProductByIdQueryHandler>();

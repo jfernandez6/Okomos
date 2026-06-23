@@ -4,7 +4,6 @@ using Okomos.Billing.Features.GetInvoiceById;
 using Okomos.Billing.Persistence;
 using Okomos.SharedKernel;
 using Okomos.SharedKernel.Abstractions.Events;
-using Okomos.SharedKernel.Behaviors.Validation;
 using Okomos.SharedKernel.IntegrationEvents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -29,7 +28,6 @@ public static class BillingDependencyInjection
         services.AddScoped<IDomainEventHandler<InvoiceCreatedEvent>, InvoiceCreatedDomainEventHandler>();
         services.AddScoped<IIntegrationEventHandler<ProductCreatedIntegrationEvent>, ProductCreatedIntegrationEventHandler>();
 
-        services.AddScoped<IValidator<CreateInvoiceCommand>, CreateInvoiceCommandValidator>();
         services.AddCommandHandler<CreateInvoiceCommand, Guid, CreateInvoiceCommandHandler, BillingDbContext>();
 
         services.AddQueryHandler<GetInvoiceByIdQuery, InvoiceDto?, GetInvoiceByIdQueryHandler>();

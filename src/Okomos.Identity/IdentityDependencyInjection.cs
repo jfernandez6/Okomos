@@ -5,7 +5,6 @@ using Okomos.Identity.Persistence;
 using Okomos.Identity.Persistence.Entities;
 using Okomos.Identity.Services;
 using Okomos.SharedKernel;
-using Okomos.SharedKernel.Behaviors.Validation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -42,11 +41,9 @@ public static class IdentityDependencyInjection
 
         services.AddOutboxStore<IdentityDbContext>();
 
-        services.AddScoped<IValidator<RegisterCommand>, RegisterCommandValidator>();
         services.AddCommandHandler<RegisterCommand, RegisterResponse, RegisterCommandHandler, IdentityDbContext>(
             useTransaction: false, useMultitenancy: false, useDomainEvents: false);
 
-        services.AddScoped<IValidator<LoginCommand>, LoginCommandValidator>();
         services.AddCommandHandler<LoginCommand, LoginResponse, LoginCommandHandler, IdentityDbContext>(
             useTransaction: false, useMultitenancy: false, useDomainEvents: false);
 

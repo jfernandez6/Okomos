@@ -14,7 +14,7 @@ public class RegisterCommandValidatorTests
             new RegisterCommand("", "Password123!", "John", "Doe"));
 
         result.IsValid.Should().BeFalse();
-        result.Errors.Should().ContainKey(nameof(RegisterCommand.Email));
+        result.Errors.Should().Contain(e => e.PropertyName == nameof(RegisterCommand.Email));
     }
 
     [Fact]
@@ -24,7 +24,7 @@ public class RegisterCommandValidatorTests
             new RegisterCommand("user@test.com", "short", "John", "Doe"));
 
         result.IsValid.Should().BeFalse();
-        result.Errors.Should().ContainKey(nameof(RegisterCommand.Password));
+        result.Errors.Should().Contain(e => e.PropertyName == nameof(RegisterCommand.Password));
     }
 
     [Fact]

@@ -13,6 +13,7 @@ public class LoginCommandValidatorTests
         var result = await _validator.ValidateAsync(new LoginCommand("user@test.com", ""));
 
         result.IsValid.Should().BeFalse();
+        result.Errors.Should().Contain(e => e.PropertyName == nameof(LoginCommand.Password));
     }
 
     [Fact]

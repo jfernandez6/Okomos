@@ -16,11 +16,13 @@ src/
 
 ## Arquitectura
 
-- **Vertical Slices**: cada feature agrupa Command/Query, Handler, Validator y endpoints.
+- **Vertical Slices**: cada feature agrupa Endpoint, Command/Query, Handler, Validator y lógica de dominio.
+- **FastEndpoints**: endpoints REPR por feature con validación integrada (FluentValidation vía `Validator<T>`).
 - **CQRS manual**: sin MediatR, handlers registrados con pipeline de decorators.
-- **Pipeline Decorator**: Validación → Logging → Multitenancy → Transacciones → Domain Events → `SaveChanges`.
-- **Domain Events**: los handlers solo agregan/modifican entidades; el `DomainEventsCommandDecorator` despacha eventos pendientes y persiste en un único `SaveChanges` dentro de la transacción.
-- **Integration Events**: Outbox Pattern + `OutboxProcessorHostedService` (intervalo y batch configurables vía `Outbox` en appsettings).
+- **Pipeline Decorator (handlers)**: Logging → Multitenancy → Transacciones → Domain Events → `SaveChanges`.
+- **Validación de entrada**: FastEndpoints ejecuta `Validator<T>` antes de invocar el handler; errores de negocio siguen usando `ValidationException` en handlers.
+- **Domain Events**: el `DomainEventsCommandDecorator` despacha eventos y persiste en un único `SaveChanges` dentro de la transacción.
+- **Integration Events**: Outbox Pattern + `OutboxProcessorHostedService` (configurable vía `Outbox` en appsettings).
 - **Outbox por módulo**: cada módulo registra `IOutboxStore<TDbContext>` (ej. `IOutboxStore<BillingDbContext>`).
 
 ## Migraciones (ejecutar manualmente)

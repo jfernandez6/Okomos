@@ -3,7 +3,6 @@ using Okomos.SharedKernel.Behaviors.DomainEvents;
 using Okomos.SharedKernel.Behaviors.Logging;
 using Okomos.SharedKernel.Behaviors.Multitenancy;
 using Okomos.SharedKernel.Behaviors.Transactions;
-using Okomos.SharedKernel.Behaviors.Validation;
 using Okomos.SharedKernel.Abstractions.Events;
 using Okomos.SharedKernel.Abstractions.Multitenancy;
 using Okomos.SharedKernel.Abstractions.Outbox;
@@ -73,10 +72,6 @@ public static class SharedKernelDependencyInjection
                 handler,
                 sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<LoggingCommandDecorator<TCommand, TResult>>>());
 
-            handler = new ValidationCommandDecorator<TCommand, TResult>(
-                handler,
-                sp.GetServices<IValidator<TCommand>>());
-
             return handler;
         });
 
@@ -104,10 +99,6 @@ public static class SharedKernelDependencyInjection
             handler = new LoggingQueryDecorator<TQuery, TResult>(
                 handler,
                 sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<LoggingQueryDecorator<TQuery, TResult>>>());
-
-            handler = new ValidationQueryDecorator<TQuery, TResult>(
-                handler,
-                sp.GetServices<IValidator<TQuery>>());
 
             return handler;
         });

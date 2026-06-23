@@ -1,19 +1,12 @@
-using Okomos.SharedKernel.Behaviors.Validation;
+using FastEndpoints;
 
 namespace Okomos.Identity.Features.Login;
 
-public sealed class LoginCommandValidator : IValidator<LoginCommand>
+public sealed class LoginCommandValidator : Validator<LoginCommand>
 {
-    public Task<ValidationResult> ValidateAsync(LoginCommand request, CancellationToken cancellationToken = default)
+    public LoginCommandValidator()
     {
-        var result = ValidationResult.Success();
-
-        if (string.IsNullOrWhiteSpace(request.Email))
-            result.AddError(nameof(request.Email), "Email is required.");
-
-        if (string.IsNullOrWhiteSpace(request.Password))
-            result.AddError(nameof(request.Password), "Password is required.");
-
-        return Task.FromResult(result);
+        RuleFor(x => x.Email).NotEmpty().WithMessage("Email is required.");
+        RuleFor(x => x.Password).NotEmpty().WithMessage("Password is required.");
     }
 }

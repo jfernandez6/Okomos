@@ -23,6 +23,18 @@ builder.Services.AddBillingModule(builder.Configuration);
 builder.Services.AddAccountingModule(builder.Configuration);
 builder.Services.AddInventoryModule(builder.Configuration);
 
+builder.Services.AddFastEndpoints(o =>
+{
+    o.Assemblies =
+    [
+        typeof(IdentityDependencyInjection).Assembly,
+        typeof(BillingDependencyInjection).Assembly,
+        typeof(AccountingDependencyInjection).Assembly,
+        typeof(InventoryDependencyInjection).Assembly,
+        typeof(Program).Assembly
+    ];
+});
+
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
 
@@ -91,13 +103,6 @@ app.UseAuthentication();
 app.UseMiddleware<TenantMiddleware>();
 app.UseAuthorization();
 
-app.MapIdentityEndpoints();
-app.MapBillingEndpoints();
-app.MapAccountingEndpoints();
-app.MapInventoryEndpoints();
-
-app.MapGet("/health", () => Results.Ok(new { Status = "Healthy", Timestamp = DateTime.UtcNow }))
-    .WithTags("Health")
-    .AllowAnonymous();
+app.UseFastEndpoints();
 
 app.Run();

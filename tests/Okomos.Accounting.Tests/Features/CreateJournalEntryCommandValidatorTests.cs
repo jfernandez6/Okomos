@@ -13,6 +13,7 @@ public class CreateJournalEntryCommandValidatorTests
         var result = await _validator.ValidateAsync(new CreateJournalEntryCommand("Entry", 100m, 50m));
 
         result.IsValid.Should().BeFalse();
+        result.Errors.Should().Contain(e => e.PropertyName == nameof(CreateJournalEntryCommand.Credit));
     }
 
     [Fact]

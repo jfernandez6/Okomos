@@ -4,7 +4,6 @@ using Okomos.Accounting.Features.GetJournalEntryById;
 using Okomos.Accounting.Persistence;
 using Okomos.SharedKernel;
 using Okomos.SharedKernel.Abstractions.Events;
-using Okomos.SharedKernel.Behaviors.Validation;
 using Okomos.SharedKernel.IntegrationEvents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -29,7 +28,6 @@ public static class AccountingDependencyInjection
         services.AddScoped<IDomainEventHandler<JournalEntryCreatedEvent>, JournalEntryCreatedDomainEventHandler>();
         services.AddScoped<IIntegrationEventHandler<InvoiceCreatedIntegrationEvent>, InvoiceCreatedIntegrationEventHandler>();
 
-        services.AddScoped<IValidator<CreateJournalEntryCommand>, CreateJournalEntryCommandValidator>();
         services.AddCommandHandler<CreateJournalEntryCommand, Guid, CreateJournalEntryCommandHandler, AccountingDbContext>();
 
         services.AddQueryHandler<GetJournalEntryByIdQuery, JournalEntryDto?, GetJournalEntryByIdQueryHandler>();

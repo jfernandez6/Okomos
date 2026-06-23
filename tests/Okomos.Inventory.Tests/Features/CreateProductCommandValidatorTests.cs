@@ -13,6 +13,7 @@ public class CreateProductCommandValidatorTests
         var result = await _validator.ValidateAsync(new CreateProductCommand("Name", "", 1, 10m));
 
         result.IsValid.Should().BeFalse();
+        result.Errors.Should().Contain(e => e.PropertyName == nameof(CreateProductCommand.Sku));
     }
 
     [Fact]
